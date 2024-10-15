@@ -1,0 +1,23 @@
+--- nvm.sh.default      2024-10-15 02:10:39.581388424 +0000
++++ nvm.sh      2024-10-15 02:15:20.157377568 +0000
+@@ -2630,8 +2630,20 @@
+     nvm_extract_tarball "${NVM_OS}" "${VERSION}" "${TARBALL}" "${TMPDIR}" && \
+     VERSION_PATH="$(nvm_version_path "${PREFIXED_VERSION}")" && \
+     nvm_cd "${TMPDIR}" && \
++
++    #ms270169
++    command printf "===> ms270169 modification: ${TMPDIR}/configure.py"
++    command sed -i "s/  target_arch = 'ia32'/  target_arch = 'ia32'\n  \n  #ms270169\n  o['cflags']+=[ os.environ.get('CFLAGS', '-march=native' if target_arch == 'ia32' else '') ]\n  print(\"===> ms270169 modification: target_arch='\" + target_arch + \"', env CFLAGS='\" + os.environ.get('CFLAGS', '') + \"' -> \" + ''.join(map(str, o['cflags'])) )\n/g" configure.py
++
+     nvm_echo '$>'./configure --prefix="${VERSION_PATH}" $ADDITIONAL_PARAMETERS'<' && \
+     ./configure --prefix="${VERSION_PATH}" $ADDITIONAL_PARAMETERS && \
++
++    #ms270169
++    if [ "${NVM_ARCH}" = "x86" ] || [ "${NVM_ARCH}" = "ia32"  ]; then
++      command printf "===> bugfix https://github.com/nodejs/node/issues/44822\n"
++        for f in $(find deps/openssl -type f -name '*.S'); do echo $f; sed -i "s/%ifdef/#ifdef/" "$f"; sed -i "s/%endif/#endif/" "$f"; done
++    fi
++
+     $make -j "${NVM_MAKE_JOBS}" ${MAKE_CXX-} && \
+     command rm -f "${VERSION_PATH}" 2>/dev/null && \
+     $make -j "${NVM_MAKE_JOBS}" ${MAKE_CXX-} install
