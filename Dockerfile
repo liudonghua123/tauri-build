@@ -18,6 +18,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | b
 ADD nvm.sh.patch .
 RUN if file /bin/bash | grep -q "32-bit"; then patch ~/.nvm/nvm.sh < nvm.sh.patch; fi
 # install the latest version of node via "nvm install node", or use "nvm install --lts" to install latest LTS.
-RUN bash -c ". ~/.bashrc && nvm install --lts"
+RUN bash -c ". ~/.bashrc && nvm install --lts && nvm cache clear"
 
 CMD cargo tauri build
