@@ -4,6 +4,10 @@ ARG NODE_VERSION=20.18.0
 
 FROM rust:${RUST_VERSION}
 
+ARG RUST_VERSION=1.81.0
+ARG TAURI_CLI_VERSION
+ARG NODE_VERSION
+
 RUN apt update -y && apt install -y libwebkit2gtk-4.1-dev \
   build-essential \
   curl \
