@@ -2,7 +2,19 @@ name: build
 
 on:
   workflow_dispatch:
-  push:
+    inputs:
+      rust-version:
+        description: 'The version of rust'
+        required: true
+        default: '1.81.0'
+      tauri-cli-version:
+        description: 'The version of tauri-cli'
+        required: true
+        default: '2.0.3'
+      node-version:
+        description: 'The version of node'
+        required: true
+        default: '20.18.0'
 
 jobs:
   docker:
@@ -26,4 +38,8 @@ jobs:
         with:
           platforms: linux/amd64,linux/386,linux/arm64,linux/arm
           push: true
-          tags: liudonghua123/tauri-build:latest
+          build-args: |
+            TAURI_CLI_VERSION=${{ github.event.inputs.tauri-cli-version }}
+            RUST_VERSION=${{ github.event.inputs.rust-version }}
+            NODE_VERSION=${{ github.event.inputs.node-version }}
+          tags: liudonghua123/tauri-build:${{ github.event.inputs.tauri-cli-version }}-rust-${{ github.event.inputs.rust-version }}-node-${{ github.event.inputs.node-version }},liudonghua123/tauri-build:latest

@@ -1,4 +1,8 @@
-FROM rust:latest
+ARG RUST_VERSION=1.81.0
+ARG TAURI_CLI_VERSION=2.0.3
+ARG NODE_VERSION=20.18.0
+
+FROM rust:${RUST_VERSION}
 
 RUN apt update -y && apt install -y libwebkit2gtk-4.1-dev \
   build-essential \
@@ -10,7 +14,7 @@ RUN apt update -y && apt install -y libwebkit2gtk-4.1-dev \
   libayatana-appindicator3-dev \
   librsvg2-dev
 
-RUN cargo install tauri-cli
+RUN cargo install tauri-cli@${TAURI_CLI_VERSION}
 
 # install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
@@ -18,6 +22,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | b
 ADD nvm.sh.patch .
 RUN if file /bin/bash | grep -q "32-bit"; then patch ~/.nvm/nvm.sh < nvm.sh.patch; fi
 # install the latest version of node via "nvm install node", or use "nvm install --lts" to install latest LTS.
-RUN bash -c ". ~/.bashrc && nvm install --lts && nvm cache clear"
+RUN bash -c ". ~/.bashrc && nvm install ${20.18.0} && nvm cache clear"
 
 CMD cargo tauri build
