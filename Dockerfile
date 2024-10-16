@@ -1,12 +1,12 @@
 ARG RUST_VERSION=1.81.0
 ARG TAURI_CLI_VERSION=2.0.3
-ARG NODE_VERSION=20.18.0
+ARG NODE_VERSION_INSTALL=20.18.0
 
 FROM rust:${RUST_VERSION}
 
 ARG RUST_VERSION=1.81.0
 ARG TAURI_CLI_VERSION
-ARG NODE_VERSION
+ARG NODE_VERSION_INSTALL
 
 RUN apt update -y && apt install -y libwebkit2gtk-4.1-dev \
   build-essential \
@@ -26,9 +26,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | b
 ADD nvm.sh.patch .
 ADD node-prebuild node-prebuild
 RUN if file /bin/bash | grep -q "32-bit"; then patch ~/.nvm/nvm.sh < nvm.sh.patch; fi
-RUN if file /bin/bash | grep -q "32-bit" && [ -f node-prebuild/node-v${NODE_VERSION}-linux-i386.tar.xz ]; then mkdir -p ~/.nvm/versions/node/v${NODE_VERSION}; tar -xvf node-prebuild/node-v${NODE_VERSION}-linux-i386.tar.xz -C ~/.nvm/versions/node/v${NODE_VERSION}; fi
+RUN if file /bin/bash | grep -q "32-bit" && [ -f node-prebuild/node-v${NODE_VERSION_INSTALL}-linux-i386.tar.xz ]; then mkdir -p ~/.nvm/versions/node/v${NODE_VERSION_INSTALL}; tar -xvf node-prebuild/node-v${NODE_VERSION_INSTALL}-linux-i386.tar.xz -C ~/.nvm/versions/node/v${NODE_VERSION_INSTALL}; fi
 # install the latest version of node via "nvm install node", or use "nvm install --lts" to install latest LTS.
-RUN bash -c ". ~/.bashrc && nvm install ${NODE_VERSION} && nvm cache clear"
+RUN bash -c ". ~/.bashrc && nvm install ${NODE_VERSION_INSTALL} && nvm cache clear"
 
 # configure cwd
 RUN mkdir -p /app && cd /app

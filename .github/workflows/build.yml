@@ -41,5 +41,5 @@ jobs:
           build-args: |
             TAURI_CLI_VERSION=${{ github.event.inputs.tauri-cli-version }}
             RUST_VERSION=${{ github.event.inputs.rust-version }}
-            NODE_VERSION=${{ github.event.inputs.node-version }}
+            NODE_VERSION_INSTALL=${{ github.event.inputs.node-version }}
           tags: liudonghua123/tauri-build:${{ github.event.inputs.tauri-cli-version }}-rust-${{ github.event.inputs.rust-version }}-node-${{ github.event.inputs.node-version }},liudonghua123/tauri-build:latest
