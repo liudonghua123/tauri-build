@@ -14,7 +14,7 @@ RUN apt update -y && apt install -y libwebkit2gtk-4.1-dev \
   libayatana-appindicator3-dev \
   librsvg2-dev
 
-RUN cargo install tauri-cli@${TAURI_CLI_VERSION}
+RUN cargo install tauri-cli@${TAURI_CLI_VERSION} && rm -rf ~/.cargo/{registry,.crates.toml,.crates2.json,.global-cache,.package-cache,.package-cache-mutate}
 
 # install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
