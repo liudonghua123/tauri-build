@@ -24,4 +24,8 @@ RUN if file /bin/bash | grep -q "32-bit"; then patch ~/.nvm/nvm.sh < nvm.sh.patc
 # install the latest version of node via "nvm install node", or use "nvm install --lts" to install latest LTS.
 RUN bash -c ". ~/.bashrc && nvm install ${20.18.0} && nvm cache clear"
 
+# configure cwd
+RUN mkdir -p /app && cd /app
+WORKDIR /app
+
 CMD cargo tauri build
